@@ -1,0 +1,53 @@
+/* 高鐵品牌主色調設定 */
+:root {
+    --thsr-orange: #EA5C15;
+    --thsr-dark-gray: #4A4A4A;
+}
+
+body {
+    background-color: #F8F9FA;
+    font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+}
+
+/* 自訂品牌文字顏色 class */
+.brand-text {
+    color: var(--thsr-orange);
+}
+
+/* 脈動動畫 - 讓沙漏背後的圓圈有呼吸感 */
+.pulse-ring {
+    animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: .5;
+        transform: scale(1.05);
+    }
+}
+
+/* 漸層進度條動畫 */
+.progress-bar-fill {
+    background: linear-gradient(90deg, #EA5C15 0%, #FF8C4B 50%, #EA5C15 100%);
+    background-size: 200% 100%;
+    animation: loadingBar 2s linear infinite;
+}
+
+@keyframes loadingBar {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+/* 跑馬燈車子微動畫 (左右晃動) */
+.train-icon {
+    animation: trainMove 3s ease-in-out infinite alternate;
+}
+
+@keyframes trainMove {
+    0% { transform: translateX(-10px); }
+    100% { transform: translateX(10px); }
+}
