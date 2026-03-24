@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台灣高鐵 - 系統繁忙排隊中</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* 高鐵品牌主色調 */
+        :root {
+            --thsr-orange: #EA5C15;
+            --thsr-dark-gray: #4A4A4A;
+        }
+
+        body {
+            background-color: #F8F9FA;
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+        }
+
+        .brand-text {
+            color: var(--thsr-orange);
+        }
+
+        /* 脈動動畫 - 讓畫面有在運作的感覺 */
+        .pulse-ring {
+            animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: .5;
+                transform: scale(1.05);
+            }
+        }
+
+        /* 漸層進度條動畫 */
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #EA5C15 0%, #FF8C4B 50%, #EA5C15 100%);
+            background-size: 200% 100%;
+            animation: loadingBar 2s linear infinite;
+        }
+
+        @keyframes loadingBar {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        /* 跑馬燈車子微動畫 */
+        .train-icon {
+            animation: trainMove 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes trainMove {
+            0% { transform: translateX(-10px); }
+            100% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-8">
+
+    <!-- 主卡片容器 -->
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden border-t-8 border-[#EA5C15]">
+        
+        <!-- 頂部 Header -->
+        <div class="px-8 py-6 flex items-center justify-between border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-train-subway text-3xl brand-text"></i>
+                <h1 class="text-xl font-bold text-gray-800 tracking-wider">台灣高鐵 <span class="text-sm font-normal text-gray-500 hidden sm:inline-block border-l-2 pl-2 ml-2">網路訂票系統</span></h1>
+            </div>
+            <div class="text-sm text-gray-500 font-mono" id="current-time">
+                --:--:--
+            </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="p-8 sm:p-10 flex flex-col items-center text-center">
+            
+            <!-- 狀態圖示 -->
+            <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
+                <div class="absolute inset-0 bg-orange-100 rounded-full pulse-ring"></div>
+                <i class="fa-solid fa-hourglass-half text-4xl brand-text relative z-10 train-icon"></i>
+            </div>
+
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">目前購票人潮眾多，請稍候</h2>
+            
+            <p class="text-gray-600 mb-8 leading-relaxed max-w-lg">
+                感謝您選擇台灣高鐵！目前正值購票尖峰時段，系統正依序處理大家的訂單。<br>
+                為了保障您的購票權益，<strong class="text-gray-800">請勿關閉或重新整理此頁面</strong>。
+            </p>
+
+            <!-- 付款安心提示區塊 (非常重要，安撫焦慮) -->
+            <div class="bg-blue-50 border border-blue-100 rounded-lg p-5 mb-8 w-full text-left flex items-start gap-4">
+                <i class="fa-solid fa-shield-heart text-blue-500 text-xl mt-1"></i>
+                <div>
+                    <h3 class="font-bold text-blue-800 mb-1">剛送出信用卡付款嗎？請安心！</h3>
+                    <p class="text-sm text-blue-700 leading-relaxed">
+                        若您剛才已經點擊了「確認付款」，您的交易紀錄皆已安全加密傳送。系統稍後會自動引導您至結果頁面，**請千萬不要手動刷新網頁**，以免造成重複扣款。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 倒數計時與進度條 -->
+            <div class="w-full max-w-md bg-gray-50 rounded-xl p-6 border border-gray-100">
+                <p class="text-sm text-gray-500 mb-3 font-medium">系統將於 <span id="countdown" class="text-xl font-bold brand-text mx-1">15</span> 秒後自動為您重新連線...</p>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                    <div id="progress-bar" class="progress-bar-fill h-2.5 rounded-full" style="width: 100%"></div>
+                </div>
+                <p class="text-xs text-gray-400 mt-4">
+                    <i class="fa-solid fa-circle-info mr-1"></i> 您目前的排隊序號：<span class="font-mono">THSR-89234-TW</span>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- 底部連結 -->
+        <div class="bg-gray-50 px-8 py-5 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-500">
+            <p>© Taiwan High Speed Rail Corporation.</p>
+            <div class="flex gap-4 mt-3 sm:mt-0">
+                <a href="#" class="hover:text-[#EA5C15] transition-colors">聯絡客服</a>
+                <a href="#" class="hover:text-[#EA5C15] transition-colors">常見問題</a>
+                <a href="#" class="hover:text-[#EA5C15] transition-colors">返回首頁</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 邏輯 -->
+    <script>
+        // 更新右上角時間
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-TW', { hour12: false });
+            document.getElementById('current-time').textContent = timeString;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 倒數計時與進度條邏輯
+        let maxTime = 15; // 設定倒數 15 秒
+        let timeLeft = maxTime;
+        const countdownEl = document.getElementById('countdown');
+        const progressBar = document.getElementById('progress-bar');
+
+        const timer = setInterval(() => {
+            timeLeft--;
+            countdownEl.textContent = timeLeft;
+            
+            // 計算進度條寬度 (視覺效果)
+            const percentage = (timeLeft / maxTime) * 100;
+            progressBar.style.width = percentage + '%';
+
+            if (timeLeft <= 0) {
+                // 時間到時的處理 (模擬重新連線)
+                clearInterval(timer);
+                countdownEl.textContent = "0";
+                countdownEl.parentElement.innerHTML = '<span class="text-gray-800 font-bold"><i class="fa-solid fa-spinner fa-spin brand-text mr-2"></i>正在嘗試重新連線中...</span>';
+                progressBar.style.width = '100%';
+                
+                // 這裡在真實環境會是 window.location.reload() 或是打 API 確認狀態
+                // 為了展示，我們設定 2 秒後重置計時器，模擬依然還在排隊
+                setTimeout(() => {
+                    timeLeft = 15;
+                    countdownEl.parentElement.innerHTML = '系統將於 <span id="countdown" class="text-xl font-bold brand-text mx-1">15</span> 秒後自動為您重新連線...';
+                    // 重新綁定元素，因為 innerHTML 被替換了
+                    startNewTimer();
+                }, 3000);
+            }
+        }, 1000);
+
+        function startNewTimer() {
+            let innerTimeLeft = 15;
+            const innerCountdownEl = document.getElementById('countdown');
+            const innerProgressBar = document.getElementById('progress-bar');
+            
+            setInterval(() => {
+                if(innerTimeLeft <= 0) return;
+                innerTimeLeft--;
+                innerCountdownEl.textContent = innerTimeLeft;
+                innerProgressBar.style.width = ((innerTimeLeft / 15) * 100) + '%';
+            }, 1000);
+        }
+
+    </script>
+</body>
+</html>
